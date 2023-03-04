@@ -4,11 +4,8 @@
 #[derive(Debug)]
 #[derive(PartialEq)]
 pub enum Token {
-    ILLEGAL,
-    EOF,
-    IDENT(Vec<char>),
-    INT(Vec<char>),
-    ASSIGN(char),
+
+    // Single character tokens.
     PLUS(char),
     COMMA(char),
     SEMICOLON(char),
@@ -16,6 +13,17 @@ pub enum Token {
     RPAREN(char),
     LBRACE(char),
     RBRACE(char),
-    FUNCTION,
-    LET
+
+    // One or two character tokens.
+    EQUAL(char),
+
+    // Literals
+    IDENT(Vec<char>),
+    INT(Vec<char>),
+
+    // Keywords
+    FUNCTION(Vec<char>),
+    LET(Vec<char>),
+    ILLEGAL,
+    EOF,
 }

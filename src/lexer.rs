@@ -33,7 +33,7 @@ impl Lexer {
         let new_token: Token;
         match self.ch {
             '=' => {
-                new_token = Token::ASSIGN(self.ch);
+                new_token = Token::EQUAL(self.ch);
             }
             ';' => {
                 new_token = Token::SEMICOLON(self.ch);
@@ -82,7 +82,7 @@ fn test_next_token() {
     let input = String::from("=+(){},;");
 
     let expected_tokens = [
-        Token::ASSIGN('='),
+        Token::EQUAL('='),
         Token::PLUS('+'),
         Token::LPAREN('('),
         Token::RPAREN(')'),
@@ -104,8 +104,8 @@ fn test_next_token() {
     }
 }
 
-/*#[test]
-fn test_next_token_extented() {
+#[test]
+fn test_next_token_extended() {
     let input = String::from("let five = 5;
                              let ten = 10;
                              
@@ -117,52 +117,53 @@ fn test_next_token_extented() {
                              ");
 
     let expected_tokens = [
-        Token::new(TokenType::LET, String::from("let")),
-        Token::new(TokenType::IDENT, String::from("five")),
-        Token::new(TokenType::ASSIGN, String::from("=")),
-        Token::new(TokenType::INT, String::from("5")),
-        Token::new(TokenType::SEMICOLON, String::from(";")),
-        Token::new(TokenType::LET, String::from("let")),
-        Token::new(TokenType::IDENT, String::from("ten")),
-        Token::new(TokenType::ASSIGN, String::from("=")),
-        Token::new(TokenType::INT, String::from("10")),
-        Token::new(TokenType::SEMICOLON, String::from(";")),
-        Token::new(TokenType::LET, String::from("let")),
-        Token::new(TokenType::IDENT, String::from("add")),
-        Token::new(TokenType::ASSIGN, String::from("=")),
-        Token::new(TokenType::FUNCTION, String::from("fn")),
-        Token::new(TokenType::LPAREN, String::from("(")),
-        Token::new(TokenType::IDENT, String::from("x")),
-        Token::new(TokenType::COMMA, String::from(",")),
-        Token::new(TokenType::IDENT, String::from("y")),
-        Token::new(TokenType::RPAREN, String::from(")")),
-        Token::new(TokenType::LBRACE, String::from("{")),
-        Token::new(TokenType::IDENT, String::from("x")),
-        Token::new(TokenType::PLUS, String::from("+")),
-        Token::new(TokenType::IDENT, String::from("y")),
-        Token::new(TokenType::SEMICOLON, String::from(";")),
-        Token::new(TokenType::RBRACE, String::from("}")),
-        Token::new(TokenType::SEMICOLON, String::from(";")),
-        Token::new(TokenType::LET, String::from("let")),
-        Token::new(TokenType::IDENT, String::from("result")),
-        Token::new(TokenType::ASSIGN, String::from("=")),
-        Token::new(TokenType::IDENT, String::from("add")),
-        Token::new(TokenType::LPAREN, String::from("(")),
-        Token::new(TokenType::IDENT, String::from("five")),
-        Token::new(TokenType::COMMA, String::from(",")),
-        Token::new(TokenType::IDENT, String::from("ten")),
-        Token::new(TokenType::RPAREN, String::from(")")),
-        Token::new(TokenType::SEMICOLON, String::from(";")),
-        Token::new(TokenType::EOF, String::from("")),
+        Token::LET("let".chars().collect()),
+        Token::IDENT("five".chars().collect()),
+        Token::EQUAL('='),
+        Token::INT("5".chars().collect()), 
+        Token::SEMICOLON(';'),
+        Token::LET("let".chars().collect()),
+        Token::IDENT("ten".chars().collect()),
+        Token::EQUAL('='),
+        Token::INT("10".chars().collect()),
+        Token::SEMICOLON(';'),
+        Token::LET("let".chars().collect()),
+        Token::IDENT("add".chars().collect()),
+        Token::EQUAL('='),
+        Token::FUNCTION("fn".chars().collect()),
+        Token::LPAREN('('),
+        Token::IDENT("x".chars().collect()),
+        Token::COMMA(','),
+        Token::IDENT("y".chars().collect()),
+        Token::RPAREN(')'),
+        Token::LBRACE('{'),
+        Token::IDENT("x".chars().collect()),
+        Token::PLUS('+'),
+        Token::IDENT("x".chars().collect()),
+        Token::SEMICOLON(';'),
+        Token::RBRACE('}'),
+        Token::SEMICOLON(';'),
+        Token::LET("let".chars().collect()),
+        Token::IDENT("result".chars().collect()),
+        Token::EQUAL('='),
+        Token::IDENT("add".chars().collect()),
+        Token::LPAREN('('),
+        Token::IDENT("five".chars().collect()),
+        Token::COMMA(','),
+        Token::IDENT("ten".chars().collect()),
+        Token::RPAREN(')'),
+        Token::SEMICOLON(';'),
+        Token::EOF,
     ];
     println!("========== TEST 2 =========");
-    let mut actual: (Lexer, Token) = (new(input), Token::new(EOF, String::from("")));
+    let mut l = Lexer::new(input.chars().collect());
+    l.read_char();
 
+    let mut actual: Token;
     for expected_token in expected_tokens.into_iter() {
-        actual = actual.0.next_token();
+        actual = l.next_token();
 
-        assert_eq!(expected_token.literal, actual.1.literal);
-        assert_eq!(expected_token.fnop_type, actual.1.fnop_type);
-    }*/
-//}
+        assert_eq!(expected_token, actual);
+    }
+}
 
