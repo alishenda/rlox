@@ -26,4 +26,5 @@ pub enum Token {
     LET(Vec<char>),
     ILLEGAL,
     EOF,
+    NOTIMPLEMENTED
 }

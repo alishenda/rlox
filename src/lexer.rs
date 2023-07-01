@@ -59,10 +59,10 @@ impl Lexer {
             _ => {
                 if is_letter(self.ch) {
                     //return (self, Token::new(TokenType::ILLEGAL, self.read_identifier()))
-                    return Token::ILLEGAL;
+                    return Token::NOTIMPLEMENTED;
                 } else {
                     //new_token = Token::new(TokenType::ILLEGAL, String::from(self.ch))
-                    return Token::ILLEGAL;
+                    return Token::NOTIMPLEMENTED;
                 }
             }
         }
