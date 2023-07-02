@@ -18,7 +18,9 @@ pub enum Token {
     RBRACE(char),
 
     // One or two character tokens.
-    EQUAL(char),
+    ASSIGN(char),
+    EQ(Vec<char>),
+    NOT_EQ(Vec<char>),
     BANG(char),
     LT(char),
     GT(char),

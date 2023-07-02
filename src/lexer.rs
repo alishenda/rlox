@@ -35,6 +35,15 @@ impl Lexer {
         self.read_position = self.read_position + 1;
     }
 
+    fn peek_char(&mut self) -> char{
+
+        return if self.read_position >= self.input.len() {
+            ' '
+        } else {
+            self.input[self.read_position]
+        }
+    }
+
     pub fn read_identifier(&mut self) -> Token {
         let position = self.position;
         while self.position < self.input.len() && is_letter(self.ch) {
@@ -89,7 +98,12 @@ impl Lexer {
 
         match self.ch {
             '=' => {
-                new_token = Token::EQUAL(self.ch);
+                if self.peek_char() == '=' {
+                    self.read_char();
+                    new_token = Token::EQ("==".chars().collect());
+                } else {
+                    new_token = Token::ASSIGN(self.ch);
+                }
             }
             ';' => {
                 new_token = Token::SEMICOLON(self.ch);
@@ -122,7 +136,12 @@ impl Lexer {
                 new_token = Token::SLASH(self.ch)
             }
             '!' => {
-                new_token = Token::BANG(self.ch)
+                if self.peek_char() == '=' {
+                    self.read_char();
+                    new_token = Token::NOT_EQ("!=".chars().collect());
+                } else {
+                    new_token = Token::BANG(self.ch)
+                }
             }
             '{' => {
                 new_token = Token::LBRACE(self.ch)
@@ -161,7 +180,7 @@ fn test_next_token() {
     let input = String::from("=+(){},;");
 
     let expected_tokens = [
-        Token::EQUAL('='),
+        Token::ASSIGN('='),
         Token::PLUS('+'),
         Token::LPAREN('('),
         Token::RPAREN(')'),
@@ -200,22 +219,25 @@ fn test_next_token_extended() {
                                  return true;
                              } else {
                                  return false;
-                             }");
+                             }
+
+                             10 == 10;
+                             10 != 9;");
 
     let expected_tokens = [
         Token::LET("let".chars().collect()),
         Token::IDENT("five".chars().collect()),
-        Token::EQUAL('='),
+        Token::ASSIGN('='),
         Token::INT("5".chars().collect()), 
         Token::SEMICOLON(';'),
         Token::LET("let".chars().collect()),
         Token::IDENT("ten".chars().collect()),
-        Token::EQUAL('='),
+        Token::ASSIGN('='),
         Token::INT("10".chars().collect()),
         Token::SEMICOLON(';'),
         Token::LET("let".chars().collect()),
         Token::IDENT("add".chars().collect()),
-        Token::EQUAL('='),
+        Token::ASSIGN('='),
         Token::FUNCTION("fn".chars().collect()),
         Token::LPAREN('('),
         Token::IDENT("x".chars().collect()),
@@ -231,7 +253,7 @@ fn test_next_token_extended() {
         Token::SEMICOLON(';'),
         Token::LET("let".chars().collect()),
         Token::IDENT("result".chars().collect()),
-        Token::EQUAL('='),
+        Token::ASSIGN('='),
         Token::IDENT("add".chars().collect()),
         Token::LPAREN('('),
         Token::IDENT("five".chars().collect()),
@@ -268,6 +290,14 @@ fn test_next_token_extended() {
         Token::FALSE("false".chars().collect()),
         Token::SEMICOLON(';'),
         Token::RBRACE('}'),
+        Token::INT("10".chars().collect()),
+        Token::EQ("==".chars().collect()),
+        Token::INT("10".chars().collect()),
+        Token::SEMICOLON(';'),
+        Token::INT("10".chars().collect()),
+        Token::NOT_EQ("!=".chars().collect()),
+        Token::INT("9".chars().collect()),
+        Token::SEMICOLON(';'),
         Token::EOF,
     ];
     println!("========== TEST 2 =========");
