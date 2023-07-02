@@ -1,15 +1,22 @@
+use std::iter::Iterator;
 use crate::token::Token;
+use crate::token::Token::{FUNCTION, IDENT, ILLEGAL, INT, LET};
 
 pub struct Lexer {
     input: Vec<char>,
-    position: usize,
+
     // current position in input (points to current char)
-    read_position: usize,
+    position: usize,
+
     // current reading position in input (after current char)
-    ch: char, // current char under examination
+    read_position: usize,
+
+    // current char under examination
+    ch: char,
 }
 
 impl Lexer {
+
     pub fn new(input: Vec<char>) -> Self {
         Self {
             input,
@@ -21,7 +28,7 @@ impl Lexer {
 
     pub fn read_char(&mut self) {
         if self.read_position >= self.input.len() {
-            self.ch = '0';
+            self.ch = ' ';
         } else {
             self.ch = self.input[self.read_position];
         }
@@ -29,8 +36,48 @@ impl Lexer {
         self.read_position = self.read_position + 1;
     }
 
+    pub fn read_identifier(&mut self) -> Token {
+        let position = self.position;
+        while self.position < self.input.len() && is_letter(self.ch) {
+            self.read_char();
+        }
+        let identifier: String = self.input[position..self.position].into_iter().collect();
+
+        return if identifier.eq("let") {
+            LET("let".chars().collect())
+        } else if identifier.eq("fn") {
+            FUNCTION("fn".chars().collect())
+        } else {
+            IDENT(identifier.chars().collect())
+        }
+    }
+
+    pub fn read_number(&mut self) -> Token {
+        let position = self.position;
+        while self.position < self.input.len() && is_digit(self.ch) {
+            self.read_char();
+        }
+
+        let identifier: String = self.input[position..self.position].into_iter().collect();
+
+        return INT(identifier.chars().collect());
+    }
+
+    fn skip_whitespace(&mut self) {
+        while self.ch == ' ' || self.ch == '\t' || self.ch == '\n' || self.ch == '\r' {
+            self.read_char();
+        }
+    }
+
     pub fn next_token(&mut self) -> Token {
+
+        if self.read_position > self.input.len() {
+            return EOF;
+        }
+
         let new_token: Token;
+        self.skip_whitespace();
+
         match self.ch {
             '=' => {
                 new_token = Token::EQUAL(self.ch);
@@ -58,11 +105,11 @@ impl Lexer {
             }
             _ => {
                 if is_letter(self.ch) {
-                    //return (self, Token::new(TokenType::ILLEGAL, self.read_identifier()))
-                    return Token::NOTIMPLEMENTED;
+                    return self.read_identifier();
+                } else if is_digit(self.ch) {
+                    return self.read_number();
                 } else {
-                    //new_token = Token::new(TokenType::ILLEGAL, String::from(self.ch))
-                    return Token::NOTIMPLEMENTED;
+                    new_token = ILLEGAL;
                 }
             }
         }
@@ -70,11 +117,16 @@ impl Lexer {
         self.read_char();
         return new_token;
     }
-}
 
+
+}
 
 fn is_letter(ch: char) -> bool {
     return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_';
+}
+
+fn is_digit(ch: char) -> bool {
+    return '0' <= ch && ch <= '9';
 }
 
 #[test]
@@ -139,7 +191,7 @@ fn test_next_token_extended() {
         Token::LBRACE('{'),
         Token::IDENT("x".chars().collect()),
         Token::PLUS('+'),
-        Token::IDENT("x".chars().collect()),
+        Token::IDENT("y".chars().collect()),
         Token::SEMICOLON(';'),
         Token::RBRACE('}'),
         Token::SEMICOLON(';'),
@@ -153,7 +205,6 @@ fn test_next_token_extended() {
         Token::IDENT("ten".chars().collect()),
         Token::RPAREN(')'),
         Token::SEMICOLON(';'),
-        Token::EOF,
     ];
     println!("========== TEST 2 =========");
     let mut l = Lexer::new(input.chars().collect());
@@ -162,7 +213,6 @@ fn test_next_token_extended() {
     let mut actual: Token;
     for expected_token in expected_tokens.into_iter() {
         actual = l.next_token();
-
         assert_eq!(expected_token, actual);
     }
 }

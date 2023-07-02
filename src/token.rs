@@ -25,6 +25,5 @@ pub enum Token {
     FUNCTION(Vec<char>),
     LET(Vec<char>),
     ILLEGAL,
-    EOF,
     NOTIMPLEMENTED
 }
