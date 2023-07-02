@@ -7,6 +7,9 @@ pub enum Token {
 
     // Single character tokens.
     PLUS(char),
+    MINUS(char),
+    SLASH(char),
+    ASTERISK(char),
     COMMA(char),
     SEMICOLON(char),
     LPAREN(char),
@@ -16,6 +19,9 @@ pub enum Token {
 
     // One or two character tokens.
     EQUAL(char),
+    BANG(char),
+    LT(char),
+    GT(char),
 
     // Literals
     IDENT(Vec<char>),
@@ -25,5 +31,6 @@ pub enum Token {
     FUNCTION(Vec<char>),
     LET(Vec<char>),
     ILLEGAL,
-    NOTIMPLEMENTED
+    NOTIMPLEMENTED,
+    EOF
 }

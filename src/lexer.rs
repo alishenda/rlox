@@ -72,7 +72,7 @@ impl Lexer {
     pub fn next_token(&mut self) -> Token {
 
         if self.read_position > self.input.len() {
-            return EOF;
+            return Token::EOF;
         }
 
         let new_token: Token;
@@ -94,8 +94,26 @@ impl Lexer {
             ',' => {
                 new_token = Token::COMMA(self.ch)
             }
+            '<' => {
+                new_token = Token::LT(self.ch)
+            }
+            '>' => {
+                new_token = Token::GT(self.ch)
+            }
             '+' => {
                 new_token = Token::PLUS(self.ch)
+            }
+            '-' => {
+                new_token = Token::MINUS(self.ch)
+            }
+            '*' => {
+                new_token = Token::ASTERISK(self.ch)
+            }
+            '/' => {
+                new_token = Token::SLASH(self.ch)
+            }
+            '!' => {
+                new_token = Token::BANG(self.ch)
             }
             '{' => {
                 new_token = Token::LBRACE(self.ch)
@@ -166,7 +184,8 @@ fn test_next_token_extended() {
                              };
 
                              let result = add(five, ten);
-                             ");
+                             !-/*5;
+                             5 < 10 > 5;");
 
     let expected_tokens = [
         Token::LET("let".chars().collect()),
@@ -205,6 +224,19 @@ fn test_next_token_extended() {
         Token::IDENT("ten".chars().collect()),
         Token::RPAREN(')'),
         Token::SEMICOLON(';'),
+        Token::BANG('!'),
+        Token::MINUS('-'),
+        Token::SLASH('/'),
+        Token::ASTERISK('*'),
+        Token::INT("5".chars().collect()),
+        Token::SEMICOLON(';'),
+        Token::INT("5".chars().collect()),
+        Token::LT('<'),
+        Token::INT("10".chars().collect()),
+        Token::GT('>'),
+        Token::INT("5".chars().collect()),
+        Token::SEMICOLON(';'),
+        Token::EOF,
     ];
     println!("========== TEST 2 =========");
     let mut l = Lexer::new(input.chars().collect());
