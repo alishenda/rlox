@@ -21,7 +21,7 @@ impl Lexer {
             input,
             position: 0,
             read_position: 0,
-            ch: '0',
+            ch: ' ',
         }
     }
 

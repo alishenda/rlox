@@ -1,6 +1,9 @@
 use std::env;
 use std::process::exit;
 use std::io;
+use std::ops::Add;
+use crate::lexer::Lexer;
+use crate::token::Token;
 
 mod lexer;
 mod token;
@@ -26,10 +29,17 @@ fn run_file(path: &String) {
 fn run_prompt() {
 
     loop {
-        let mut line = String::new();
         print!("> ");
+        let mut line = String::new();
         io::stdin().read_line(&mut line).expect("Failed to read line");
         if line.is_empty() { break; };
-        println!("{}", &mut line);
+        let mut l = Lexer::new(line.chars().collect());
+
+        let mut token: Token = Token::ILLEGAL;
+        while token != Token::EOF {
+            token = l.next_token();
+            println!("{:?}", token)
+        }
+        println!("fin");
     }
 }
