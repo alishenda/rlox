@@ -30,6 +30,12 @@ pub enum Token {
     // Keywords
     FUNCTION(Vec<char>),
     LET(Vec<char>),
+    TRUE(Vec<char>),
+    FALSE(Vec<char>),
+    IF(Vec<char>),
+    ELSE(Vec<char>),
+    RETURN(Vec<char>),
+
     ILLEGAL,
     NOTIMPLEMENTED,
     EOF
