@@ -20,7 +20,7 @@ pub enum Token {
     // One or two character tokens.
     ASSIGN(char),
     EQ(Vec<char>),
-    NOT_EQ(Vec<char>),
+    NOTEQ(Vec<char>),
     BANG(char),
     LT(char),
     GT(char),
@@ -39,6 +39,5 @@ pub enum Token {
     RETURN(Vec<char>),
 
     ILLEGAL,
-    NOTIMPLEMENTED,
     EOF
 }

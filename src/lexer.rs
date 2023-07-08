@@ -138,7 +138,7 @@ impl Lexer {
             '!' => {
                 if self.peek_char() == '=' {
                     self.read_char();
-                    new_token = Token::NOT_EQ("!=".chars().collect());
+                    new_token = Token::NOTEQ("!=".chars().collect());
                 } else {
                     new_token = Token::BANG(self.ch)
                 }
@@ -295,7 +295,7 @@ fn test_next_token_extended() {
         Token::INT("10".chars().collect()),
         Token::SEMICOLON(';'),
         Token::INT("10".chars().collect()),
-        Token::NOT_EQ("!=".chars().collect()),
+        Token::NOTEQ("!=".chars().collect()),
         Token::INT("9".chars().collect()),
         Token::SEMICOLON(';'),
         Token::EOF,
