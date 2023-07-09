@@ -8,6 +8,7 @@ use crate::token::Token;
 mod lexer;
 mod token;
 mod ast;
+mod parser;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
